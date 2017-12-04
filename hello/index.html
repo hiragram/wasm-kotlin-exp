@@ -15,7 +15,7 @@
   .then(response => response.arrayBuffer())
   .then(buffer => WebAssembly.compile(buffer))
   .then(module => {
-      const instance = new WebAssembly.Instance(module);
+      const instance = new WebAssembly.instantiate(module);
       //0から10までの階乗計算結果をログ出力
       for (var i = 0; i <= 10; i++) {
           console.log(instance.exports.fact(i));
