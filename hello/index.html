@@ -15,16 +15,12 @@
   .then(response => response.arrayBuffer())
   .then(buffer => { 
       var module = WebAssembly.compile(buffer);
-      console.log(module)
       return module;
     })
   .then(module => {
+      console.log(module);
       const instance = new WebAssembly.instantiate(module, {});
-      //0から10までの階乗計算結果をログ出力
-    //   for (var i = 0; i <= 10; i++) {
-    //       console.log(instance.exports.greet());
-    //   }
-      console.log(instance.exports.greet());
+      console.log(instance);
   });
 </script>
 
