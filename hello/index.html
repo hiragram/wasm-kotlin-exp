@@ -12,7 +12,7 @@
 
 <script type='text/javascript'>
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'hello.wasm', true);
+  xhr.open('GET', 'program.wasm', true);
   xhr.responseType = 'arraybuffer';
   xhr.onload = function() {
     var binary = xhr.response;
