@@ -20,7 +20,10 @@
   .then(module => {
       console.log(module);
       const instance = new WebAssembly.instantiate(module, {});
-      console.log(instance);
+      return instance
+  })
+  .then(instance => {
+      instance.exports.greet()
   });
 </script>
 
