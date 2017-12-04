@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>WebAssembly Test</title>
+</head>
+<body>
+
+<input type="button" id="countup" value="CountUp?" />
+
+<script type='text/javascript'>
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'hello.wasm', true);
+  xhr.responseType = 'arraybuffer';
+  xhr.onload = function() {
+    var binary = xhr.response;
+    var binarray = new Uint8Array( binary );
+    var module = Wasm.instantiateModule( binarray, {} );
+    console.log( module );
+    document.getElementById( 'countup' ).addEventListener( 'click', function (){
+      this.value = module.exports.count();
+    }, false);
+  };
+  xhr.send(null);
+</script>
+
+</body>
+</html>
