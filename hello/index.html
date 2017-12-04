@@ -11,19 +11,16 @@
 <input type="button" id="countup" value="CountUp?" />
 
 <script type='text/javascript'>
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'program.wasm', true);
-  xhr.responseType = 'arraybuffer';
-  xhr.onload = function() {
-    var binary = xhr.response;
-    var binarray = new Uint8Array( binary );
-    var module = Wasm.instantiateModule( binarray, {} );
-    console.log( module );
-    document.getElementById( 'countup' ).addEventListener( 'click', function (){
-      this.value = module.exports.count();
-    }, false);
-  };
-  xhr.send(null);
+  fetch('program.wasm')
+  .then(response => response.arrayBuffer())
+  .then(buffer => WebAssembly.compile(buffer))
+  .then(module => {
+      const instance = new WebAssembly.Instance(module);
+      //0から10までの階乗計算結果をログ出力
+      for (var i = 0; i <= 10; i++) {
+          console.log(instance.exports.fact(i));
+      }
+  });
 </script>
 
 </body>
