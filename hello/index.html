@@ -11,20 +11,35 @@
 <input type="button" id="countup" value="CountUp?" />
 
 <script type='text/javascript'>
-  fetch('program.wasm')
-  .then(response => response.arrayBuffer())
-  .then(buffer => { 
-      var module = WebAssembly.compile(buffer);
-      return module;
-    })
-  .then(module => {
-      console.log(module);
-      const instance = new WebAssembly.instantiate(module, {});
-      return instance
-  })
-  .then(instance => {
-      instance.exports.greet()
-  });
+  const loadWebAssembly = ( filename, imports ) => {
+    return fetch( filename )
+        .then( response => response.arrayBuffer() )
+        .then( buffer => WebAssembly.compile( buffer ) )
+        .then( module => {
+            imports = imports || {}
+            imports.env = imports.env || {}
+
+            imports.env.printf = arg => console.log( arg )
+
+            if( !imports.env.memory )
+                imports.env.memory = new WebAssembly.Memory( {
+                    initial: 256
+                } )
+
+            if( !imports.env.table )
+                imports.env.table = new WebAssembly.Table( {
+                    initial: 18,
+                    element: 'anyfunc'
+                } )
+
+            return new WebAssembly.Instance( module, imports )
+        } )
+}
+
+loadWebAssembly( 'program.wasm' ).then( instance => {
+    const exports = instance.exports
+    exports.main()
+} )
 </script>
 
 </body>
